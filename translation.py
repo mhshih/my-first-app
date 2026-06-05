@@ -1,14 +1,16 @@
-import google.generativeai as genai
-from google.colab import userdata
+import google.genai as genai
+client = genai.Client(api_key="")
 
-# 從 Colab secret 讀取 API key（不要寫死在 cell 裡！）
-genai.configure(api_key=userdata.get("GEMINI_API_KEY"))
-
-# 選一個模型
-model = genai.GenerativeModel("gemini-2.5-flash")
-
-# 發送請求
-response = model.generate_content("翻成日語：今天天氣真好")
+from google.genai import types
+response = client.models.generate_content(
+            model='gemini-2.5-flash',
+                contents=types.Part.from_text(text='翻成日語：今天天氣真好'),
+                    config=types.GenerateContentConfig(
+                                temperature=0,
+                                        top_p=0.95,
+                                                top_k=20,
+                                                    ),
+                    )
 
 # 印出回應
 print(response.text)
